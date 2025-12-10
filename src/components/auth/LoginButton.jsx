@@ -1,6 +1,5 @@
 import React from 'react';
-import { useGoogleLogin } from '@react-oauth/google';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/lib/AuthContext';
 import { Button } from '@/components/ui/button';
 import { LogIn, LogOut, Shield } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -15,11 +14,6 @@ import {
 
 export default function LoginButton() {
   const { user, isAdmin, login, logout } = useAuth();
-
-  const handleGoogleLogin = useGoogleLogin({
-    onSuccess: (tokenResponse) => login(tokenResponse),
-    onError: () => console.log('Login Failed'),
-  });
 
   if (user) {
     return (
@@ -65,8 +59,8 @@ export default function LoginButton() {
 
   return (
     <Button 
-        onClick={() => handleGoogleLogin()}
-        variant="outline" 
+        onClick={() => login()}
+        variant="outline"
         className="gap-2 border-slate-700 bg-slate-900/50 hover:bg-slate-800 hover:text-white"
     >
       <LogIn className="w-4 h-4" />

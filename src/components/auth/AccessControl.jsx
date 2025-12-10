@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuth } from '@/components/auth/AuthContext';
+import { useAuth } from '@/lib/AuthContext';
 
 export function AdminOnly({ children, fallback = null }) {
   const { isAdmin, isLoading } = useAuth();

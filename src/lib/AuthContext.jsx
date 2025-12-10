@@ -128,14 +128,20 @@ export const AuthProvider = ({ children }) => {
     base44.auth.redirectToLogin(window.location.href);
   };
 
+  const isAdmin = user?.email === 'yonikashi432@gmail.com';
+  const isLoading = isLoadingAuth || isLoadingPublicSettings;
+
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      isAuthenticated, 
+    <AuthContext.Provider value={{
+      user,
+      isAdmin,
+      isAuthenticated,
+      isLoading,
       isLoadingAuth,
       isLoadingPublicSettings,
       authError,
       appPublicSettings,
+      login: navigateToLogin,
       logout,
       navigateToLogin,
       checkAppState
