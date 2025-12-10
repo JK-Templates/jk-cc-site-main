@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { AuthProvider } from '@/components/auth/AuthContext';
@@ -7,6 +6,7 @@ import { Menu, X, Globe, Book, Zap, Home, Mail, PenTool, Film } from 'lucide-rea
 import { Toaster } from 'sonner';
 import SeoHead from '@/components/SeoHead';
 import { createPageUrl } from '@/utils';
+import { SITE_MODES, loadSiteMode, persistSiteModeOverride } from '@/config/siteMode';
 
 import Preloader from '@/components/ui/Preloader';
 import CustomCursor from '@/components/ui/CustomCursor';
@@ -46,13 +46,25 @@ const generateDreamPalette = () => {
     ];
 };
 
+const groundedPalette = [
+  '#0ea5e9',
+  '#6366f1',
+  '#22c55e',
+  '#fbbf24',
+  '#f97316',
+];
+
 export default function Layout({ children, currentPageName }) {
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isTransitionActive, setIsTransitionActive] = useState(false);
-  const [dreamPalette, setDreamPalette] = useState([]);
+  const [siteMode, setSiteMode] = useState(loadSiteMode);
+  const isLsdMode = siteMode === SITE_MODES.LSD;
+  const [dreamPalette, setDreamPalette] = useState(() =>
+    isLsdMode ? generateDreamPalette() : groundedPalette
+  );
   const location = useLocation();
 
 
@@ -66,9 +78,9 @@ export default function Layout({ children, currentPageName }) {
   };
 
   useEffect(() => {
-    // New dream every load
-    setDreamPalette(generateDreamPalette());
-    
+    // New dream every load when in LSD mode; grounded palette for normal mode
+    setDreamPalette(isLsdMode ? generateDreamPalette() : groundedPalette);
+
     // Simulate initial loading sequence
     const timer = setTimeout(() => setIsLoading(false), 800);
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -77,17 +89,23 @@ export default function Layout({ children, currentPageName }) {
         window.removeEventListener('scroll', handleScroll);
         clearTimeout(timer);
     };
-  }, []);
+  }, [isLsdMode]);
 
   // Smooth scroll to top on route change
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     // Optional: Shift palette slightly on navigation for "lucid dream" continuity
-    if (dreamPalette.length > 0) {
+    if (isLsdMode && dreamPalette.length > 0) {
         // Shift colors
         setDreamPalette(prev => [...prev.slice(1), prev[0]]);
     }
-  }, [location.pathname]);
+  }, [location.pathname, isLsdMode, dreamPalette.length]);
+
+  const toggleSiteMode = () => {
+    const nextMode = isLsdMode ? SITE_MODES.NORMAL : SITE_MODES.LSD;
+    setSiteMode(nextMode);
+    persistSiteModeOverride(nextMode);
+  };
 
   const navItems = [
     { to: 'Home', icon: Home, label: 'ראשי' },
@@ -104,58 +122,63 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <AuthProvider>
-    <div dir="rtl" className="min-h-screen bg-slate-950 text-slate-200 font-sans overflow-x-hidden">
+    <div
+      dir="rtl"
+      className={`min-h-screen text-slate-200 font-sans overflow-x-hidden ${
+        isLsdMode ? 'bg-slate-950' : 'bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950'
+      }`}
+    >
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-amber-500 focus:text-black top-0 right-0">
         דלג לתוכן העיקרי
       </a>
       <SeoHead />
-      <CustomCursor color={primaryColor} />
+      {isLsdMode && <CustomCursor color={primaryColor} />}
       
       <AnimatePresence>
         {isLoading && <Preloader color={primaryColor} />}
       </AnimatePresence>
 
       {/* LSD Dream Background */}
-      {dreamPalette.length > 0 && (
-          <>
-            <ParticleBackground colors={dreamPalette} />
-            <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-                {/* Animated Dream Blobs */}
-                <motion.div 
-                    animate={{ 
-                        scale: [1, 1.2, 0.8, 1], 
-                        x: [0, 100, -50, 0],
-                        y: [0, -50, 50, 0],
-                        opacity: [0.3, 0.5, 0.3]
-                    }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                    className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full blur-[120px] mix-blend-screen"
-                    style={{ backgroundColor: dreamPalette[0] }}
-                />
-                <motion.div 
-                    animate={{ 
-                        scale: [1.2, 0.9, 1.1, 1.2], 
-                        x: [0, -100, 50, 0], 
-                        y: [0, 50, -100, 0],
-                        opacity: [0.2, 0.4, 0.2]
-                    }}
-                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                    className="absolute bottom-[-10%] left-[-10%] w-[700px] h-[700px] rounded-full blur-[120px] mix-blend-screen"
-                    style={{ backgroundColor: dreamPalette[1] }}
-                />
-                <motion.div 
-                    animate={{ 
-                        scale: [0.8, 1.1, 0.9, 0.8], 
-                        x: [0, 50, -50, 0],
-                        rotate: [0, 180, 360] 
-                    }}
-                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                    className="absolute top-[40%] left-[30%] w-[400px] h-[400px] rounded-full blur-[100px] mix-blend-screen"
-                    style={{ backgroundColor: dreamPalette[2], opacity: 0.15 }}
-                />
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05] mix-blend-overlay" />
-            </div>
-          </>
+      {isLsdMode && dreamPalette.length > 0 && (
+        <>
+          <ParticleBackground colors={dreamPalette} />
+          <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+              {/* Animated Dream Blobs */}
+              <motion.div
+                  animate={{
+                      scale: [1, 1.2, 0.8, 1],
+                      x: [0, 100, -50, 0],
+                      y: [0, -50, 50, 0],
+                      opacity: [0.3, 0.5, 0.3]
+                  }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                  className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full blur-[120px] mix-blend-screen"
+                  style={{ backgroundColor: dreamPalette[0] }}
+              />
+              <motion.div
+                  animate={{
+                      scale: [1.2, 0.9, 1.1, 1.2],
+                      x: [0, -100, 50, 0],
+                      y: [0, 50, -100, 0],
+                      opacity: [0.2, 0.4, 0.2]
+                  }}
+                  transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                  className="absolute bottom-[-10%] left-[-10%] w-[700px] h-[700px] rounded-full blur-[120px] mix-blend-screen"
+                  style={{ backgroundColor: dreamPalette[1] }}
+              />
+              <motion.div
+                  animate={{
+                      scale: [0.8, 1.1, 0.9, 0.8],
+                      x: [0, 50, -50, 0],
+                      rotate: [0, 180, 360]
+                  }}
+                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                  className="absolute top-[40%] left-[30%] w-[400px] h-[400px] rounded-full blur-[100px] mix-blend-screen"
+                  style={{ backgroundColor: dreamPalette[2], opacity: 0.15 }}
+              />
+              <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05] mix-blend-overlay" />
+          </div>
+        </>
       )}
 
       {/* Navigation */}
@@ -232,14 +255,21 @@ export default function Layout({ children, currentPageName }) {
           <div className="hidden md:flex items-center gap-2">
 
             {navItems.map((item, index) => (
-              <NavItem 
-                key={item.to} 
-                {...item} 
+              <NavItem
+                key={item.to}
+                {...item}
                 isActive={currentPageName === item.to}
                 onClick={() => {}}
                 color={dreamPalette[(index % dreamPalette.length)] || primaryColor}
               />
             ))}
+            <button
+              type="button"
+              onClick={toggleSiteMode}
+              className="ml-3 px-3 py-2 text-xs font-semibold rounded-lg border border-white/10 text-slate-300 hover:text-white hover:border-white/30 transition"
+            >
+              מצב: {isLsdMode ? 'LSD' : 'רגיל'}
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -263,14 +293,24 @@ export default function Layout({ children, currentPageName }) {
           >
             <div className="flex flex-col gap-4">
               {navItems.map((item, index) => (
-                <NavItem 
-                  key={item.to} 
-                  {...item} 
+                <NavItem
+                  key={item.to}
+                  {...item}
                   isActive={currentPageName === item.to}
                   onClick={() => setIsMobileMenuOpen(false)}
                   color={dreamPalette[(index % dreamPalette.length)] || primaryColor}
                 />
               ))}
+              <button
+                type="button"
+                onClick={() => {
+                  toggleSiteMode();
+                  setIsMobileMenuOpen(false);
+                }}
+                className="mt-4 px-4 py-3 rounded-lg border border-white/10 text-left text-sm text-slate-200 bg-slate-900/40 hover:border-white/30 transition"
+              >
+                מעבר למצב {isLsdMode ? 'רגיל' : 'LSD'}
+              </button>
             </div>
           </motion.div>
         )}
