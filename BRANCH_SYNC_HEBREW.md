@@ -84,11 +84,19 @@ git push origin release/v1-insipre-ux
 - [ ] החלטה אם התכונה מוכנה ל-main
 - [ ] סנכרון release עם main
 - [ ] יצירת PR: release → main (אם מוכן)
+- [ ] לאשר אסטרטגיית פריסה לשתי הסביבות (www/test) לפני מיזוג
 
 ### ניקיון (אחרי המיזוגים):
 - [ ] מחיקת ברנצ'ים שמוזגו
 - [ ] מחיקת multi-launch-esYSGrwe-*
 - [ ] עדכון תיעוד
+
+## יישור פריסות בין שתי המטריצות
+
+- ריפו ראשי למוד פרודקשן/רגיל: [`base44dev/jony-kashis-portfolio-9277b9c5`](https://github.com/base44dev/jony-kashis-portfolio-9277b9c5)
+- ריפו למוד Matrix/LSD: [`base44dev/jony-kashis-portfolio-copy-e1c0bc77`](https://github.com/base44dev/jony-kashis-portfolio-copy-e1c0bc77)
+- אחרי כל מיזוג ל-`main`, למשוך ולדחוף לשני הריפואים כדי לשמור על תוכן זהה, עם הבדל יחיד במצב (mode)
+- לבצע בדיקות עשן קצרות על שני האתרים: `www.jonykashi.cc` (רגיל) ו-`test.jonykashi.cc` (LSD)
 
 ## פקודות Git שימושיות
 
