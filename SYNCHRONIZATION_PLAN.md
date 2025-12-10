@@ -124,6 +124,7 @@ git push origin release/v1-insipre-ux --force-with-lease
 
 - [x] ✅ Analyze branch structure
 - [x] ✅ Document current state
+- [ ] 🔍 Run quick code review on `development` and `release/v1-insipre-ux` to confirm LSD/Main mode boundaries
 - [ ] 🔄 Review animated logo feature in development
 - [ ] 🔄 Create PR: development → main
 - [ ] 🔄 Review and test animated logo changes
@@ -133,6 +134,7 @@ git push origin release/v1-insipre-ux --force-with-lease
 
 - [ ] 📋 Review LSD mode feature in release/v1-insipre-ux
 - [ ] 📋 Decide if feature is ready for main
+- [ ] 📋 Confirm downstream deployment strategy for both hosted modes before merging
 - [ ] 📋 Update release branch with latest main changes
 - [ ] 📋 Create PR: release/v1-insipre-ux → main (if ready)
 - [ ] 📋 Test integrated features
@@ -144,6 +146,14 @@ git push origin release/v1-insipre-ux --force-with-lease
 - [ ] 🗑️ Delete multi-launch-esYSGrwe-* branch
 - [ ] 🗑️ Archive copilot/* working branches
 - [ ] 📝 Update documentation
+
+### Phase 4: Downstream Deployment Alignment (Ongoing)
+
+- [ ] 🔁 After each merge to `main`, downstream to both hosted repos
+  - Production/standard mode: [`base44dev/jony-kashis-portfolio-9277b9c5`](https://github.com/base44dev/jony-kashis-portfolio-9277b9c5)
+  - Matrix/LSD mode: [`base44dev/jony-kashis-portfolio-copy-e1c0bc77`](https://github.com/base44dev/jony-kashis-portfolio-copy-e1c0bc77)
+- [ ] 🧭 Ensure configuration toggles (mode switch) remain isolated so that content stays identical across sites except for the mode
+- [ ] 🧪 Run smoke checks on both deployments after sync
 
 ## Branch Protection Rules (Recommended)
 
