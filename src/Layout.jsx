@@ -1,14 +1,18 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { AuthProvider } from '@/components/auth/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Globe, Code, Book, Zap, Home, Mail, PenTool, Film } from 'lucide-react';
+import { Menu, X, Globe, Book, Zap, Home, Mail, PenTool, Film } from 'lucide-react';
 import { Toaster } from 'sonner';
 import SeoHead from '@/components/SeoHead';
 import { createPageUrl } from '@/utils';
+
 import Preloader from '@/components/ui/Preloader';
 import CustomCursor from '@/components/ui/CustomCursor';
 import ParticleBackground from '@/components/ui/ParticleBackground';
+import SiteTransition from '@/components/ui/SiteTransition';
+import GlobalAnimations from '@/components/ui/global-animations.css.jsx';
 import '@/components/ui/global-animations.css';
 
 const NavItem = ({ to, icon: Icon, label, isActive, onClick, color }) => (
@@ -43,11 +47,23 @@ const generateDreamPalette = () => {
 };
 
 export default function Layout({ children, currentPageName }) {
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isTransitionActive, setIsTransitionActive] = useState(false);
   const [dreamPalette, setDreamPalette] = useState([]);
   const location = useLocation();
+
+
+  const handleLogoClick = (e) => {
+    e.preventDefault();
+    setIsTransitionActive(true);
+  };
+
+  const handleTransitionComplete = () => {
+    setIsTransitionActive(false);
+  };
 
   useEffect(() => {
     // New dream every load
@@ -154,16 +170,53 @@ export default function Layout({ children, currentPageName }) {
         }}
       >
         <div className="container mx-auto px-6 flex items-center justify-between">
-          <a href="https://test.jonykashi.cc" className="flex items-center gap-2 group">
+
+
+          <a href="https://test.jonykashi.cc" className="flex items-center gap-2 group" onClick={handleLogoClick}>
             <motion.div 
-                whileHover={{ rotate: 180, scale: 1.1 }}
-                className="w-8 h-8 rounded-sm flex items-center justify-center text-slate-950 font-bold text-lg shadow-lg transition-all"
+                whileHover={{ 
+                    rotate: [0, 180, 360],
+                    scale: [1, 1.2, 1],
+                    filter: [
+                        "blur(0px) brightness(1)",
+                        "blur(1px) brightness(1.3)",
+                        "blur(0px) brightness(1)"
+                    ]
+                }}
+                whileTap={{ scale: 0.9 }}
+                animate={{
+                    filter: [
+                        "blur(0px)",
+                        "blur(0.5px)",
+                        "blur(0px)"
+                    ]
+                }}
+                transition={{ 
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                }}
+                className="relative w-8 h-8 rounded-sm flex items-center justify-center text-slate-950 font-bold text-lg shadow-lg transition-all overflow-hidden"
                 style={{ 
                     background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`,
                     boxShadow: `0 0 20px ${primaryColor}40`
                 }}
             >
-              K
+              {/* Animated background overlay */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-br from-transparent via-white/20 to-transparent"
+                animate={{
+                    x: ["-100%", "100%"],
+                    rotate: [0, 45]
+                }}
+                transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    repeatDelay: 2,
+                    ease: "easeInOut"
+                }}
+              />
+              <span className="relative z-10">K</span>
             </motion.div>
             <span 
                 className="text-xl font-bold bg-clip-text text-transparent transition-all duration-500"
@@ -177,11 +230,13 @@ export default function Layout({ children, currentPageName }) {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-2">
+
             {navItems.map((item, index) => (
               <NavItem 
                 key={item.to} 
                 {...item} 
                 isActive={currentPageName === item.to}
+                onClick={() => {}}
                 color={dreamPalette[(index % dreamPalette.length)] || primaryColor}
               />
             ))}
@@ -248,17 +303,29 @@ export default function Layout({ children, currentPageName }) {
         }}
       />
 
+
       {/* Footer */}
       <footer className="relative z-10 border-t border-slate-800/50 py-12 bg-slate-950/50 backdrop-blur-sm">
         <div className="container mx-auto px-6 text-center text-slate-500">
           <p>© {new Date().getFullYear()} Jonathan Kashi. All Rights Reserved.</p>
           <div className="flex justify-center gap-6 mt-4">
-             <a href="#" className="transition-colors hover:text-[var(--hover-color)]" style={{ '--hover-color': primaryColor }}>LinkedIn</a>
-             <a href="#" className="transition-colors hover:text-[var(--hover-color)]" style={{ '--hover-color': primaryColor }}>GitHub</a>
-             <a href="#" className="transition-colors hover:text-[var(--hover-color)]" style={{ '--hover-color': primaryColor }}>Email</a>
+             <a href="#" className="transition-colors hover:text-slate-200" style={{ color: primaryColor }}>LinkedIn</a>
+             <a href="#" className="transition-colors hover:text-slate-200" style={{ color: primaryColor }}>GitHub</a>
+             <a href="#" className="transition-colors hover:text-slate-200" style={{ color: primaryColor }}>Email</a>
           </div>
         </div>
       </footer>
+
+
+      {/* Site Transition Overlay */}
+      <SiteTransition 
+        isActive={isTransitionActive}
+        onComplete={handleTransitionComplete}
+        targetUrl="https://test.jonykashi.cc"
+      />
+
+      {/* Global Animations */}
+      <GlobalAnimations currentPageName={currentPageName} />
     </div>
     </AuthProvider>
   );
