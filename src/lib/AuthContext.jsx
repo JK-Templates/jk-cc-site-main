@@ -141,7 +141,6 @@ export const AuthProvider = ({ children }) => {
       isLoadingPublicSettings,
       authError,
       appPublicSettings,
-      login: navigateToLogin,
       logout,
       login,
       navigateToLogin,
