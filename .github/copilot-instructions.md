@@ -127,12 +127,12 @@ Use the following strategy order to detect the default branch:
 
 ### Release Branch Pattern
 
-Release branches follow the pattern: `release/v*`
+Release branches follow the pattern: `release/*`
 
-Examples:
-- `release/v1.0.0`
-- `release/v2.1.3`
-- `release/v1.0.0-beta.1`
+Common patterns include:
+- SemVer format: `release/v1.0.0`, `release/v2.1.3`, `release/v1.0.0-beta.1`
+- Named releases: `release/v1-feature-name`
+- The pattern is flexible to accommodate various release naming conventions
 
 ## Workflow Guidelines
 
@@ -142,7 +142,7 @@ Examples:
 2. **Version Calculation:** Compute SemVer from commit messages and git log
 3. **Testing:** Run all test suites and ensure they pass
 4. **PR Review:** Review and approve PRs before merging
-5. **Merge Strategy:** Use squash merge for all PRs
+5. **Merge Strategy:** Prefer squash merge for PRs to maintain clean history (align with repository practices)
 6. **Release Preparation:** Prepare release candidates with proper version tags
 7. **Human Approval:** **ALWAYS** require explicit human approval before creating final releases
 
