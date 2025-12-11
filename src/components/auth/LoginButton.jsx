@@ -14,9 +14,10 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 export default function LoginButton() {
-  const { user, isAdmin, login, logout } = useAuth();
+  const { user, isAuthenticated, logout, navigateToLogin } = useAuth();
+  const isAdmin = Boolean(user?.is_admin);
 
-  if (user) {
+  if (isAuthenticated && user) {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -59,8 +60,8 @@ export default function LoginButton() {
   }
 
   return (
-    <Button 
-        onClick={() => login()}
+    <Button
+        onClick={() => navigateToLogin()}
         variant="outline"
         className="gap-2 border-slate-700 bg-slate-900/50 hover:bg-slate-800 hover:text-white"
     >
