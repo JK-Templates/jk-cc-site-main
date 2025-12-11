@@ -136,9 +136,7 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider value={{
       user,
-      isAdmin,
       isAuthenticated,
-      isLoading,
       isLoadingAuth,
       isLoadingPublicSettings,
       authError,
