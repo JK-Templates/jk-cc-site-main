@@ -64,6 +64,16 @@ git branch -d multi-launch-esYSGrwe-1765370181145-claude
 git push origin --delete multi-launch-esYSGrwe-1765370181145-claude
 ```
 
+### Stale branches and PRs to clean up
+- **Close duplicate PRs**: #7 (`codex/add-form-submission-handler-to-contact`) duplicates #8. Close #7 and delete its branch after closing.
+- **Close superseded auth-context PRs**: #4, #6, and #9 are all covered by #10 (`codex/refactor-authentication-context-usage`). Close the older PRs and delete their branches after closing.
+- **Delete orphaned branches** (no open PRs):
+  - `codex/consolidate-prs-into-v1.1`
+  - `codex/fix-issues-in-all-repositories-as-needed`
+  - `codex/run-code-review-on-all-repositories`
+  - `codex/update-ci/cd-pipelines-for-portfolio`
+  - `codex/update-ci/cd-pipelines-for-portfolio-4hwolt`
+
 ## Documentation Guide
 
 This analysis has created three comprehensive documents:

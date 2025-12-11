@@ -13,6 +13,9 @@ export const AuthProvider = ({ children }) => {
   const [authError, setAuthError] = useState(null);
   const [appPublicSettings, setAppPublicSettings] = useState(null); // Contains only { id, public_settings }
 
+  const isAdmin = user?.email === 'yonikashi432@gmail.com';
+  const isLoading = isLoadingAuth || isLoadingPublicSettings;
+
   useEffect(() => {
     checkAppState();
   }, []);
@@ -128,8 +131,7 @@ export const AuthProvider = ({ children }) => {
     base44.auth.redirectToLogin(window.location.href);
   };
 
-  const isAdmin = user?.email === 'yonikashi432@gmail.com';
-  const isLoading = isLoadingAuth || isLoadingPublicSettings;
+  const login = () => navigateToLogin();
 
   return (
     <AuthContext.Provider value={{
@@ -143,8 +145,11 @@ export const AuthProvider = ({ children }) => {
       appPublicSettings,
       login: navigateToLogin,
       logout,
+      login,
       navigateToLogin,
-      checkAppState
+      checkAppState,
+      isAdmin,
+      isLoading
     }}>
       {children}
     </AuthContext.Provider>
