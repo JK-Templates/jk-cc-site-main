@@ -134,9 +134,9 @@ export const AuthProvider = ({ children }) => {
   const login = () => navigateToLogin();
 
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      isAuthenticated, 
+    <AuthContext.Provider value={{
+      user,
+      isAuthenticated,
       isLoadingAuth,
       isLoadingPublicSettings,
       authError,

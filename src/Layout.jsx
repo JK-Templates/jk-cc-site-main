@@ -120,13 +120,6 @@ export default function Layout({ children, currentPageName }) {
   const secondaryColor = dreamPalette[1] || '#8b5cf6'; // Default to violet
 
   return (
-    <AuthProvider>
-    <div
-      dir="rtl"
-      className={`min-h-screen text-slate-200 font-sans overflow-x-hidden ${
-        isLsdMode ? 'bg-slate-950' : 'bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950'
-      }`}
-    >
     <div dir="rtl" className="min-h-screen bg-slate-950 text-slate-200 font-sans overflow-x-hidden">
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-amber-500 focus:text-black top-0 right-0">
         דלג לתוכן העיקרי
