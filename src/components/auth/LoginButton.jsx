@@ -46,7 +46,7 @@ export default function LoginButton() {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator className="bg-slate-800" />
-          <DropdownMenuItem 
+          <DropdownMenuItem
             onClick={logout}
             className="text-red-400 focus:bg-slate-900 focus:text-red-300 cursor-pointer"
           >
@@ -60,9 +60,9 @@ export default function LoginButton() {
 
   return (
     <Button
-        onClick={() => navigateToLogin()}
-        variant="outline"
-        className="gap-2 border-slate-700 bg-slate-900/50 hover:bg-slate-800 hover:text-white"
+      onClick={() => navigateToLogin()}
+      variant="outline"
+      className="gap-2 border-slate-700 bg-slate-900/50 hover:bg-slate-800 hover:text-white"
     >
       <LogIn className="w-4 h-4" />
       <span>התחבר</span>

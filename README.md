@@ -379,12 +379,40 @@ VITE_SITE_URL=https://jonykashi.cc
 
 ### Security Notes
 
-⚠️ **Important**: 
+⚠️ **Important**:
 - Never commit `.env` files to version control
 - Use different keys for development and production
 - Rotate keys regularly
 - Keep secret keys on the server side only
 - All `VITE_*` prefixed variables are exposed in the client bundle
+
+### Environment Profiles (Normal vs. LSD)
+
+Use separate `.env` files per deployment target to avoid leaking experimental flags between environments:
+
+| Scenario | `VITE_SITE_MODE` | Other Recommended Values | Notes |
+| --- | --- | --- | --- |
+| Local preview of the grounded palette | `normal` | `VITE_SITE_URL=http://localhost:5173` | Matches production look-and-feel without the Matrix visuals. |
+| Local preview of the lucid-dream experience | `lsd` | `VITE_SITE_URL=http://localhost:5173` | Enables animated backgrounds; useful before syncing to `test.jonykashi.cc`. |
+| Production (`www.jonykashi.cc`) | `normal` | Configure analytics keys here only | Keep only production-ready keys; do not include experimental toggles. |
+| Test (`test.jonykashi.cc`) | `lsd` | Allow sandbox credentials for Stripe/Google | Safe space for drive-content experiments and animation tweaks. |
+
+Sample `.env.local` for a quick LSD-mode run-through:
+
+```env
+VITE_SITE_MODE=lsd
+VITE_SITE_URL=http://localhost:5173
+VITE_DRIVE_HERO_TITLE=Test Hero (LSD)
+VITE_DRIVE_CATEGORIES_FEED_URL=https://example.com/mock-categories.json
+```
+
+### Content Refresh Checklist (Google Drive)
+
+1. Publish the source document/image to the web and copy the embed link (avoid share links that require auth).
+2. Update the relevant `VITE_DRIVE_*` variables and restart the dev server to ensure Vite reloads the new values.
+3. Visit the home page in both modes (`normal` and `lsd`) and confirm fallback content is not shown.
+4. Capture a screenshot for release notes if the hero art or categories change; store links in `RELEASE_NOTES.md`.
+5. Remove obsolete test links from `.env.local` before committing or creating a PR.
 
 ---
 
