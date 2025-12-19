@@ -12,6 +12,7 @@ import CustomCursor from '@/components/ui/CustomCursor';
 import ParticleBackground from '@/components/ui/ParticleBackground';
 import SiteTransition from '@/components/ui/SiteTransition';
 import GlobalAnimations from '@/components/ui/global-animations.css.jsx';
+import Footer from '@/components/Footer';
 import '@/components/ui/global-animations.css';
 
 const NavItem = ({ to, icon: Icon, label, isActive, onClick, color }) => (
@@ -108,11 +109,10 @@ export default function Layout({ children, currentPageName }) {
 
   const navItems = [
     { to: 'Home', icon: Home, label: 'ראשי' },
-    { to: 'Portfolio', icon: Globe, label: 'תיק עבודות' },
-    { to: 'Codex', icon: Book, label: 'קודקס' },
-    { to: 'AIPrompts', icon: Zap, label: 'AI Prompts' },
-    { to: 'AIVideos', icon: Film, label: 'סרטוני AI' },
-    { to: 'Blog', icon: PenTool, label: 'בלוג' },
+    { to: 'Technology', icon: Zap, label: 'טכנולוגיה' },
+    { to: 'Services', icon: Globe, label: 'שירותים' },
+    { to: 'Manifesto', icon: Book, label: 'מניפסט' },
+    { to: 'Audit', icon: PenTool, label: 'Audit' },
     { to: 'Contact', icon: Mail, label: 'צור קשר' },
   ];
 
@@ -336,19 +336,8 @@ export default function Layout({ children, currentPageName }) {
         }}
       />
 
-
       {/* Footer */}
-      <footer className="relative z-10 border-t border-slate-800/50 py-12 bg-slate-950/50 backdrop-blur-sm">
-        <div className="container mx-auto px-6 text-center text-slate-500">
-          <p>© {new Date().getFullYear()} Jonathan Kashi. All Rights Reserved.</p>
-          <div className="flex justify-center gap-6 mt-4">
-             <a href="#" className="transition-colors hover:text-slate-200" style={{ color: primaryColor }}>LinkedIn</a>
-             <a href="#" className="transition-colors hover:text-slate-200" style={{ color: primaryColor }}>GitHub</a>
-             <a href="#" className="transition-colors hover:text-slate-200" style={{ color: primaryColor }}>Email</a>
-          </div>
-        </div>
-      </footer>
-
+      <Footer />
 
       {/* Site Transition Overlay */}
       <SiteTransition 
